@@ -26,11 +26,11 @@ namespace FRDDYL002
 		
 		unsigned char getPixel(int row, int col) const;
 		
+		int getavgPixel();
+
 		int getX() const;
 		
 		int getY() const;
-		
-		void makeBlank();
 		
 		void swapTiles(Tile& swapping_tile);
 	};

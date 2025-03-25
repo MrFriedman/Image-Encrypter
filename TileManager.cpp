@@ -134,13 +134,12 @@ namespace FRDDYL002
 			for (int tile_x = 0; tile_x < width_new; tile_x+=tile_width) 
 			{
 				Tile* tile = new Tile(tile_y, tile_x, tile_width, tile_height, pixel_data);
-				// Need to make the last tile blank
-				if (tile_y == (grid_number - 1) * tile_height && tile_x == (grid_number - 1) * tile_width)
-				{
-					tile->makeBlank();
-				}
-		
+
 				board[tile_y / tile_height][tile_x / tile_width] = tile;
+
+				
+				cout << "Average Pixel Value for Tile at (" << tile_x << ", " << tile_y << "): " 
+				<< tile->getavgPixel() << endl;
 			}
 			
 		}

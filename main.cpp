@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 	FRDDYL002::TileManager tileManager(grid_number, number_moves, input_filename, output_filename);
 	
 	// Method to call the startGame method which starts the game
-	tileManager.startGame();
+	//tileManager.startGame();
 	
     	return 0;
 }

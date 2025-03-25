@@ -20,7 +20,7 @@ namespace FRDDYL002
 		        this->pixel_data[i - y][j - x] = image_data[i][j];
 		    }
 		}
-	
+		//cout << "Height: " << y+height << "Width: " << x+width << endl;
 	}	
 	
 	FRDDYL002::Tile::~Tile()
@@ -45,19 +45,24 @@ namespace FRDDYL002
 	{
 		return this->pixel_data[row][col];
 	}
-	
-	void FRDDYL002::Tile::makeBlank() 
+
+	int FRDDYL002::Tile::getavgPixel()
 	{
 		if (pixel_data != nullptr)
 		{
+			int count = 0;
 			for (int i = 0; i < height; ++i)
 			{
 			    for (int j = 0; j < width; ++j) 
 			    {
-				pixel_data[i][j] = 0; // Set to blank value
+				//cout << static_cast<int>(pixel_data[i][j]) << endl;
+				count += static_cast<int>(pixel_data[i][j]); // Set to blank value
 			    }
+			}
+			//cout << count/(height*width) << endl; 
+			return count/(height*width);
 		}
-		}
+		return 1;
 	}
 	
 	int FRDDYL002::Tile::getX() const
