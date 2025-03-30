@@ -18,11 +18,12 @@ using namespace std;
 namespace FRDDYL002 
 {
 	// Default Constructor
-	FRDDYL002::TileManager::TileManager() : grid_number(0), number_moves(0), input_filename(""), output_filename("")
+	FRDDYL002::TileManager::TileManager() : grid_number(0), last_grid_height(0), last_grid_width(0), number_moves(0), input_filename(""), output_filename("")
 	{}
 	
 	// Custom Constructor - reads image and creates board
-	FRDDYL002::TileManager::TileManager(int grid_number, int number_moves, const std::string& input_filename, const std::string& output_filename) : grid_number(grid_number), number_moves(number_moves), input_filename(input_filename), output_filename(output_filename) 
+	FRDDYL002::TileManager::TileManager(int grid_number, int last_grid_height, int last_grid_width, int number_moves, const std::string& input_filename, const std::string& output_filename) : 
+	grid_number(grid_number), last_grid_height(last_grid_height), last_grid_width(last_grid_width), number_moves(number_moves), input_filename(input_filename), output_filename(output_filename) 
 	{	
 		readImage(input_filename);
 		createBoard();
@@ -35,18 +36,32 @@ namespace FRDDYL002
 		{
 			for (int i = 0; i < grid_number; i++) 
 			{
-	    			if (board[i] != nullptr) 
-	    			{
-					for (int j = 0; j < grid_number; j++) 
-					{
-		    				delete board[i][j]; 
-					}
+				if (board[i] != nullptr) 
+				{
 					delete[] board[i];
-	    			}
+					board[i] = nullptr;
+				}
 			}
 			delete[] board;
 			board = nullptr;
 		}
+		cout << "Nlr" << endl;
+
+		if (last_grid != nullptr)
+		{
+
+			for (int i = 0; i < last_grid_height; i++) 
+			{
+				if (last_grid[i] != nullptr) 
+				{
+					delete[] last_grid[i];
+					last_grid[i] = nullptr;
+				}
+			}
+			delete[] last_grid;
+			last_grid = nullptr;
+		}
+		
 		
 		if (pixel_data != nullptr) 
 		{
@@ -80,7 +95,7 @@ namespace FRDDYL002
 		}
 		
 	}
-	
+
 	// Take in the new board after a move is performed
 	void FRDDYL002::TileManager::writeImage(unsigned char** updated_board, int width, int height, const string& output_filename) 
 	{
@@ -117,29 +132,49 @@ namespace FRDDYL002
 		// Need to divide the width and height up.
 		int tile_width = int(width / grid_number);
 		int tile_height = int(height / grid_number);
+
+		// Need to divide the width and height *of the last grid up.
+		int last_tile_width = int(width / last_grid_width);
+		int last_tile_height = int(height / last_grid_height);
 		
 		// Recalculate width and height
 		int width_new = tile_width * grid_number;
 		int height_new = tile_height * grid_number;
+
+		/* Recalculate width and height but considering the last_grid??????
+		int width_new = tile_width * grid_number;
+		int height_new = tile_height * grid_number; */
 		
 		board = new Tile**[grid_number]; // 2D array of type Tiles with rows = grid_size
+		last_grid = new Tile**[last_grid_height];
+		// Initialise board
 		for (int i = 0; i < grid_number; i++) 
 		{
 			board[i] = new Tile*[grid_number]; // Every index of board should have a column = grid_size
 		}
-		int i = 0;
-		int j = 0;
+		// Initialise last grid
+		for (int j = 0; j < last_grid_height; j++) 
+		{
+			last_grid[j] = new Tile*[last_grid_width]; // Every index of board should have a column = grid_size
+		}
+		// Pass pixel data for the board but for last section divide up for last grid
 		for (int tile_y = 0; tile_y < height_new; tile_y+=tile_height)
 		{
 			for (int tile_x = 0; tile_x < width_new; tile_x+=tile_width) 
 			{
-				Tile* tile = new Tile(tile_y, tile_x, tile_width, tile_height, pixel_data);
+				// if on the last grid
+				if (int(height_new/tile_height) == 2)
+				{
+					cout << "Last Tile" << endl;
+					Tile* tile = new Tile(tile_y, tile_x, tile_width, tile_height, pixel_data);
 
-				board[tile_y / tile_height][tile_x / tile_width] = tile;
+					board[tile_y / tile_height][tile_x / tile_width] = tile;
 
-				
-				cout << "Average Pixel Value for Tile at (" << tile_x << ", " << tile_y << "): " 
-				<< tile->getavgPixel() << endl;
+					//Average Pixel Number of each tile
+					cout << "Average Pixel Value for Tile at (" << tile_x << ", " << tile_y << "): " 
+					<< tile->getavgPixel() << endl;
+				}
+				else { cout << "Poes" << endl; }
 			}
 			
 		}
@@ -235,7 +270,7 @@ namespace FRDDYL002
 			
 	    	}
 
-	    	// Iterate over each tile in the grid
+	    	// Iterate over each tile in the grid - Ganna need to iterate over the last 27...
 	    	for (int tile_y = 0; tile_y < height_new; tile_y += tile_height)
 		{
 			for (int tile_x = 0; tile_x < width_new; tile_x += tile_width) 
@@ -252,8 +287,8 @@ namespace FRDDYL002
 		            			{
 		                			for (int col = 0; col < tile_width; col++)
 		                			{
-		                    				unsigned char tile_pixel = tile->getPixel(row, col);
-		                    				board_buffer[tile_y + row][tile_x + col] = tile_pixel;
+										unsigned char tile_pixel = tile->getPixel(row, col);
+										board_buffer[tile_y + row][tile_x + col] = tile_pixel;
 		                			}
 		            			}
 		        		}

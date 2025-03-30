@@ -16,7 +16,7 @@ namespace FRDDYL002 {
 	//class PGMimage;
 	
 	class TileManager {
-			int grid_number;
+			int grid_number, last_grid_height, last_grid_width;
 			int number_moves;
 			int width, height, width_new, height_new;
 			string input_filename, output_filename;
@@ -24,12 +24,13 @@ namespace FRDDYL002 {
 			//unsigned char** image_data;
 			unsigned char** board_buffer;
 			Tile*** board;
+			Tile*** last_grid;
 			//vector<PGMimage> saved_images;
 			
 		public:
 			TileManager();
 			
-			TileManager(int grid_number, int number_moves, const string& input_filename, const string& output_filename);
+			TileManager(int grid_number, int last_grid_height, int last_grid_width, int number_moves, const string& input_filename, const string& output_filename);
 			
 			~TileManager();
 			
