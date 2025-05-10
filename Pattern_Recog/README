@@ -1,0 +1,36 @@
+Author: Dylan Friedman - FRDDYL002
+Assignment 3 - 08/04/2025
+
+# PGM Image Processor 
+
+Please note, either use the images in the root dir or move the image from Assignment Resouces folder to root and make PGM.
+
+To run the program:
+- type "make" in the terminal then "./findcomp" with the respective command line arguments
+
+To run the unit tests:
+- type "make" and then "make tests" in the terminal
+
+## File Structure:
+
+1. **PGMimageProcessor.h/cpp**
+   - Main class for PGM image processing
+   - Handles image I/O, component extraction and filtering
+   - Implements connected component analysis
+
+2. **ConnectedComponent.h/cpp**
+   - Represents individual connected components
+   - Stores pixel coordinates and component metadata
+   - Used by PGMimageProcessor for component tracking
+
+3. **driver.cpp** 
+   - Example main program demonstrating functionality
+   - Shows basic usage of the PGMimageProcessor class
+
+4. **catch.hpp**
+   - Catch2 testing framework header
+   - Used for unit tests (not required for main program)
+
+5. **test_driver.cpp**
+   - Comprehensive unit tests for all functionality
+   - Tests image processing and component analysis
